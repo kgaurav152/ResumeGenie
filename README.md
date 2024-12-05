@@ -29,10 +29,10 @@ Ensure you have the following installed:
 ### Installation
 
 1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/resumegenie.git
-   cd resumegenie
-    ```
+ ```
+ git clone https://github.com/yourusername/resumegenie.git
+ cd resumegenie
+ ```
 
 2. Install dependencies:
 ```
