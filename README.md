@@ -14,7 +14,7 @@
 - **Framework**: [Next.js](https://nextjs.org/) (Frontend + Backend)
 - **Database**: [MongoDB](https://www.mongodb.com/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) and [ShadCN UI](https://shadcn.dev/)
-- **PDF Generation**: [Mention library/tool if applicable]
+- **PDF Generation**: [React-Pdf](https://react-pdf.org/)
 
 ## Getting Started
 
@@ -30,7 +30,7 @@ Ensure you have the following installed:
 
 1. Clone the repository:
  ```
- git clone https://github.com/yourusername/resumegenie.git
+ git clone https://github.com/kgaurav152/resumegenie.git
  cd resumegenie
  ```
 
