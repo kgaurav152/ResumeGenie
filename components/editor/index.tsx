@@ -50,10 +50,12 @@ const RichTextEditor = (props: {
       const prompt = PROMPT.replace("{jobTitle}", jobTitle);
       const result = await AIChatSession.sendMessage(prompt);
       const responseText = await result.response.text();
-      const validJsonArray = JSON.parse(`[${responseText}]`);
 
-      setValue(validJsonArray?.[0]);
-      onEditorChange(validJsonArray?.[0]);
+      const responseJson = JSON.parse(responseText);
+      const bulletPointsHTML = responseJson.bulletPoints;
+
+      setValue(bulletPointsHTML);
+      onEditorChange(bulletPointsHTML);
     } catch (error) {
       console.log(error);
       toast({
