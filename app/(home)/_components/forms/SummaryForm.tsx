@@ -12,10 +12,15 @@ import { ResumeDataType } from "@/types/resume.type";
 import { Loader, Sparkles } from "lucide-react";
 import React, { useCallback, useState } from "react";
 
+interface Summary {
+  experienceLevel: string;
+  summary: string;
+}
+
 interface GeneratesSummaryType {
-  fresher: string;
-  mid: string;
-  experienced: string;
+  [experienceLevel: string]: {
+    summary: string[];
+  };
 }
 
 const prompt = `Job Title: {jobTitle}. Based on the job title, please generate concise 
@@ -90,8 +95,8 @@ const SummaryForm = (props: { handleNext: () => void }) => {
       const PROMPT = prompt.replace("{jobTitle}", jobTitle);
       const result = await AIChatSession.sendMessage(PROMPT);
       const responseText = await result.response.text();
-      console.log(responseText);
-      setAiGeneratedSummary(JSON?.parse(responseText));
+      const parsedResponse = JSON.parse(responseText);
+      setAiGeneratedSummary(parsedResponse);
     } catch (error) {
       toast({
         title: "Failed to generate summary",
@@ -147,24 +152,24 @@ const SummaryForm = (props: { handleNext: () => void }) => {
           {aiGeneratedSummary && (
             <div>
               <h5 className="font-semibold text-[15px] my-4">Suggestions</h5>
-              {Object?.entries(aiGeneratedSummary)?.map(
-                ([experienceType, summary], index) => (
+              {Object.entries(aiGeneratedSummary).map(
+                ([experienceType, { summary }], index) => (
                   <Card
                     role="button"
                     key={index}
-                    className="my-4 bg-primary/5 shadow-none
-                            border-primary/30
-                          "
-                    onClick={() => handleSelect(summary)}
+                    className="my-4 bg-primary/5 shadow-none border-primary/30"
+                    onClick={() => handleSelect(summary.join(" "))}
                   >
                     <CardHeader className="py-2">
                       <CardTitle className="font-semibold text-md">
-                        {experienceType?.charAt(0)?.toUpperCase() +
-                          experienceType?.slice(1)}
+                        {experienceType.charAt(0).toUpperCase() +
+                          experienceType.slice(1)}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="text-sm">
-                      <p>{summary}</p>
+                      {summary.map((text, idx) => (
+                        <p key={idx}>{text}</p>
+                      ))}
                     </CardContent>
                   </Card>
                 )
