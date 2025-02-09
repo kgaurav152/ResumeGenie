@@ -68,7 +68,7 @@ const ExperienceForm = (props: { handleNext: () => void }) => {
     setExperienceList(updatedExperience);
   };
 
-  const handEditor = (value: string, name: string, index: number) => {
+  const handleEditor = (value: string, name: string, index: number) => {
     setExperienceList((prevState) => {
       const newExperienceList = [...prevState];
       newExperienceList[index] = {
@@ -223,7 +223,7 @@ const ExperienceForm = (props: { handleNext: () => void }) => {
                     jobTitle={item.title}
                     initialValue={item.workSummary || ""}
                     onEditorChange={(value: string) =>
-                      handEditor(value, "workSummary", index)
+                      handleEditor(value, "workSummary", index)
                     }
                   />
                 </div>
