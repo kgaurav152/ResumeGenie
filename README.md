@@ -62,11 +62,14 @@ npm install
 ```
 
 3. Set up environment variables:
-   Create a .env.local file in the root directory and add the following:
+   Create a .env.local file in the root directory and add the key-pair values available in .env.example, some of them are shown below:
 
 ```
-MONGODB_URI=your-mongodb-connection-string
+KINDE_SITE_URL=http://localhost:3000
+KINDE_POST_LOGOUT_REDIRECT_URL=http://localhost:3000
+KINDE_POST_LOGIN_REDIRECT_URL=http://localhost:3000/dashboard
 NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_GEMINI_API_KEY=ABcdEfGHijk98Lm76No5pQRstUvw43x2Y1zQwEr
 ```
 
 4. Start the development server:
@@ -80,3 +83,46 @@ npm run dev
 ```
 http://localhost:3000
 ```
+
+## 🔄 Deploy to Vercel
+
+To deploy this project to Vercel, follow these steps:
+
+### 1. Add Environment Variables
+
+After deploying, navigate to **Vercel > Project Settings > Environment Variables** and add the necessary environment variables for production.
+
+Replace all occurrences of `localhost` with your Vercel domain URL, as shown below:
+
+```plaintext
+KINDE_SITE_URL=https://resume-genie-mu.vercel.app/
+KINDE_POST_LOGOUT_REDIRECT_URL=https://resume-genie-mu.vercel.app/
+KINDE_POST_LOGIN_REDIRECT_URL=https://resume-genie-mu.vercel.app/dashboard
+NEXT_PUBLIC_APP_URL=https://resume-genie-mu.vercel.app/
+```
+
+These variables ensure that the app functions properly on your Vercel deployment.
+
+### 2. Initialize and Deploy
+
+Run the following command to initialize the deployment:
+
+```bash
+vercel
+```
+
+This command will prompt you to configure the project for the first time if it hasn't been linked to Vercel.
+
+Once configured, deploy the project to production using:
+
+```bash
+vercel --prod
+```
+
+This will push your latest changes live on Vercel.
+
+## 🔍 Versions & Packages
+
+To view all packages and dependencies used, check out the [Versions](versions/version.md) file.
+
+---
