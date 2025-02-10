@@ -85,7 +85,13 @@ export default function Home() {
                 src="/images/board-img.png"
                 alt="App dashboard"
                 fill
-                className="object-contain w-full h-full rounded-md"
+                className="object-contain w-full h-full rounded-md  block dark:hidden"
+              />
+              <Image
+                src="/images/board-dark-img.png"
+                alt="App dashboard"
+                fill
+                className="object-contain w-full h-full rounded-md hidden dark:block"
               />
             </div>
           </div>
