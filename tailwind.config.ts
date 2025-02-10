@@ -58,6 +58,14 @@ const config: Config = {
       },
       fontFamily: {
         "open-sans": ["var(--font-open_sans)"],
+      },keyframes: {
+        'pulse-slow': {
+          '0%, 100%': { opacity: "1" },
+          '50%': { opacity: "0.5" },
+        },
+      },
+      animation: {
+        'pulse-slow': 'pulse-slow 1s ease-in-out infinite',
       },
     },
   },
