@@ -18,6 +18,24 @@ export default function Home() {
             Powered by Gemini
             <ChevronRight className="w-4 h-4" />
           </div>
+          <div className="flex flex-col mt-5 items-center text-center">
+            <div className="flex items-center gap-2">
+              <Image
+                src={"/images/resumeGenieLogo_WhiteBg.png"}
+                height={400}
+                width={800}
+                alt="resume genie logo"
+                className="block dark:hidden"
+              />
+              <Image
+                src={"/images/resumeGenieLogo_DarkBg.png"}
+                height={400}
+                width={800}
+                alt="resume genie logo"
+                className="dark:block hidden"
+              />
+            </div>
+          </div>
 
           <div className="flex flex-col mt-5 items-center text-center">
             <h1 className="text-6xl font-black">
@@ -30,9 +48,15 @@ export default function Home() {
                 resume builder
               </p>
             </h1>
-            <p className=" block text-xl mt-3 font-medium text-black/70">
+            <p className=" block text-xl mt-3 font-medium text-black/70 dark:text-white/70">
               Build a professional,resume with our free builder, and share it
               with, shareable link.
+            </p>
+            <p className="max-w-[700px] text-base font-medium mt-1 pt-3 leading-8 text-center text-[#36454F] dark:text-white/80">
+              <span className="w-2 h-2 text-[#339d5d] animate-pulse-slow">
+                ●{" "}
+              </span>
+              No subscription needed
             </p>
             <br />
             <div className="flex items-center gap-2">

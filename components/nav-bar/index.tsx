@@ -6,11 +6,12 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const NavBar = () => {
   return (
     <div className="shadow-sm w-full sticky top-0  bg-white dark:bg-gray-900 z-[9999]">
-      <div className="w-full flex items-center justify-center h-auto bg-black">
+      {/* <div className="w-full flex items-center justify-center h-auto bg-black">
         <div className="max-w-6xl mx-auto py-2">
           <p className="text-white text-sm">
             <b>Subcribe to the channel 🙏</b>! Boost your resume with Resume
@@ -21,11 +22,27 @@ const NavBar = () => {
             </a>
           </p>
         </div>
-      </div>
+      </div> */}
       <div className="w-full mx-auto max-w-7xl p-3 px-5 flex items-center justify-between ">
         <div className="flex items-center flex-1 gap-9">
           <div>
-            <h5 className="font-black text-lg text-primary">ResumeGenie</h5>
+            {/* <h5 className="font-black text-lg text-primary">ResumeGenie</h5> */}
+            <>
+              <Image
+                src={"/images/resumeGenie_Cropped_Black.png"}
+                height={30}
+                width={130}
+                alt="resume genie logo"
+                className="block dark:hidden"
+              />
+              <Image
+                src={"/images/resumeGenie_Cropped_White.png"}
+                height={30}
+                width={130}
+                alt="resume genie logo"
+                className="dark:block hidden"
+              />
+            </>
           </div>
 
           <div className="hidden lg:flex">

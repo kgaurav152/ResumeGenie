@@ -15,6 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const Header = () => {
   const { setTheme } = useTheme();
@@ -42,7 +43,23 @@ const Header = () => {
                       text-primary
                           "
             >
-              ResumeGenie
+              {/* ResumeGenie */}
+              <>
+                <Image
+                  src={"/images/resumeGenie_Cropped_Black.png"}
+                  height={30}
+                  width={130}
+                  alt="resume genie logo"
+                  className="block dark:hidden"
+                />
+                <Image
+                  src={"/images/resumeGenie_Cropped_White.png"}
+                  height={30}
+                  width={130}
+                  alt="resume genie logo"
+                  className="dark:block hidden"
+                />
+              </>
             </Link>
           </div>
 
