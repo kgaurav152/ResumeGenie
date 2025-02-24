@@ -1,6 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useResumeContext } from "@/context/resume-info-provider";
@@ -40,6 +47,8 @@ const SummaryForm = (props: { handleNext: () => void }) => {
   const [loading, setLoading] = useState(false);
   const [aiGeneratedSummary, setAiGeneratedSummary] =
     useState<GeneratesSummaryType | null>(null);
+  const [userContext, setUserContext] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleChange = (e: { target: { value: string } }) => {
     const { value } = e.target;
@@ -87,16 +96,22 @@ const SummaryForm = (props: { handleNext: () => void }) => {
     [resumeInfo]
   );
 
-  const GenerateSummaryFromAI = async () => {
+  const GenerateSummaryFromAI = async (context: string) => {
     try {
       const jobTitle = resumeInfo?.personalInfo?.jobTitle;
       if (!jobTitle) return;
       setLoading(true);
-      const PROMPT = prompt.replace("{jobTitle}", jobTitle);
+
+      const contextPrompt = context
+        ? `${prompt} Additional Context: ${context}`
+        : prompt;
+
+      const PROMPT = contextPrompt.replace("{jobTitle}", jobTitle);
       const result = await AIChatSession.sendMessage(PROMPT);
       const responseText = await result.response.text();
       const parsedResponse = JSON.parse(responseText);
       setAiGeneratedSummary(parsedResponse);
+      setIsDialogOpen(false);
     } catch (error) {
       toast({
         title: "Failed to generate summary",
@@ -131,7 +146,42 @@ const SummaryForm = (props: { handleNext: () => void }) => {
         <form onSubmit={handleSubmit}>
           <div className="flex items-end justify-between">
             <Label>Add Summary</Label>
-            <Button
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="gap-1"
+                  disabled={loading || isPending}
+                >
+                  <Sparkles size="15px" className="text-purple-500" />
+                  Generate with AI
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Provide Additional Context</DialogTitle>
+                </DialogHeader>
+                <Textarea
+                  className="mt-5 min-h-36"
+                  placeholder="Enter any additional context for the AI (optional)"
+                  value={userContext}
+                  onChange={(e) => setUserContext(e.target.value)}
+                />
+                <Button
+                  type="button"
+                  onClick={() => GenerateSummaryFromAI(userContext)}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Loader size="15px" className="animate-spin" />
+                  ) : (
+                    "Generate Summary"
+                  )}
+                </Button>
+              </DialogContent>
+            </Dialog>
+            {/* <Button
               variant="outline"
               type="button"
               className="gap-1"
@@ -140,7 +190,7 @@ const SummaryForm = (props: { handleNext: () => void }) => {
             >
               <Sparkles size="15px" className="text-purple-500" />
               Generate with AI
-            </Button>
+            </Button> */}
           </div>
           <Textarea
             className="mt-5 min-h-36"
