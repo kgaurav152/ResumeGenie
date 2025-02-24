@@ -17,6 +17,14 @@ import { Button } from "../ui/button";
 import { Loader, Sparkles } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { AIChatSession } from "@/lib/google-ai-model";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "../ui/textarea";
 
 const PROMPT = `Given the job title "{jobTitle}",
  create 6-7 concise and personal bullet points in
@@ -36,18 +44,24 @@ const RichTextEditor = (props: {
 
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(initialValue || "");
+  const [userContext, setUserContext] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const GenerateSummaryFromAI = async () => {
+  const GenerateSummaryFromAI = async (context: string) => {
     try {
       if (!jobTitle) {
         toast({
           title: "Must provide Job Postion",
           variant: "destructive",
         });
+        setIsDialogOpen(false);
         return;
       }
       setLoading(true);
-      const prompt = PROMPT.replace("{jobTitle}", jobTitle);
+      const contextPrompt = context
+        ? `${PROMPT} Additional Context: ${context}`
+        : PROMPT;
+      const prompt = contextPrompt.replace("{jobTitle}", jobTitle);
       const result = await AIChatSession.sendMessage(prompt);
       const responseText = await result.response.text();
 
@@ -56,6 +70,7 @@ const RichTextEditor = (props: {
 
       setValue(bulletPointsHTML);
       onEditorChange(bulletPointsHTML);
+      setIsDialogOpen(false);
     } catch (error) {
       console.log(error);
       toast({
@@ -74,19 +89,44 @@ const RichTextEditor = (props: {
       justify-between my-2"
       >
         <Label>Work Summary</Label>
-        <Button
-          variant="outline"
-          type="button"
-          className="gap-1"
-          disabled={loading}
-          onClick={() => GenerateSummaryFromAI()}
-        >
-          <>
-            <Sparkles size="15px" className="text-purple-500" />
-            Generate with AI
-          </>
-          {loading && <Loader size="13px" className="animate-spin" />}
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              type="button"
+              className="gap-1"
+              disabled={loading}
+            >
+              <>
+                <Sparkles size="15px" className="text-purple-500" />
+                Generate with AI
+              </>
+              {loading && <Loader size="13px" className="animate-spin" />}
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Provide Additional Context</DialogTitle>
+            </DialogHeader>
+            <Textarea
+              className="mt-5 min-h-36"
+              placeholder="Enter any additional context for the AI (optional)"
+              value={userContext}
+              onChange={(e) => setUserContext(e.target.value)}
+            />
+            <Button
+              type="button"
+              onClick={() => GenerateSummaryFromAI(userContext)}
+              disabled={loading}
+            >
+              {loading ? (
+                <Loader size="15px" className="animate-spin" />
+              ) : (
+                "Generate Summary"
+              )}
+            </Button>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <EditorProvider>
