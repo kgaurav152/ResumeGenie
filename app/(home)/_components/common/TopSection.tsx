@@ -66,13 +66,8 @@ const TopSection = () => {
           This resume is in the trash bin
         </div>
       )}
-      <div
-        className="
-          w-full flex items-center justify-between
-          border-b pb-3
-          "
-      >
-        <div className="flex items-center gap-2">
+      <div className="w-full flex items-center justify-between border-b pb-3 gap-2 md:gap-4">
+        <div className="flex items-center gap-2 flex-1 min-w-[160px]">
           <ResumeTitle
             isLoading={isLoading || isPending}
             initialTitle={resumeInfo?.title || ""}
@@ -80,7 +75,7 @@ const TopSection = () => {
             onSave={(value) => handleTitle(value)}
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap justify-end md:justify-start w-full md:w-auto">
           {/* {ThemeColor} */}
           <ThemeColor />
 
