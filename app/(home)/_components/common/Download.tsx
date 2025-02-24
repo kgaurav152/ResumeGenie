@@ -30,23 +30,61 @@ const Download = (props: {
     const fileName = formatFileName(title);
     try {
       const canvas = await html2canvas(resumeElement, { scale: 2 });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
       const imgWidth = 210; //A4 size in mm
-      const pageHeight = 295;
+      const pageHeight = 295; // A4 height in mm
+      const marginTop = 15; // Top margin (only for subsequent pages)
+      const marginBottom = 20; // Bottom margin
+      const availablePageHeight = pageHeight - marginBottom; // First page has no top margin
+
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
+      let pageIndex = 0;
 
-      let position = 0;
-      9;
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      const pdf = new jsPDF();
 
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+      let pageCanvas = document.createElement("canvas");
+      let pageCtx = pageCanvas.getContext("2d");
+
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = availablePageHeight * (canvas.width / imgWidth); // Scale height accordingly
+
+      while (heightLeft > 0) {
+        // Clear the temporary canvas
+        pageCtx?.clearRect(0, 0, pageCanvas.width, pageCanvas.height);
+
+        // Draw the required section of the original canvas onto the new canvas
+        pageCtx?.drawImage(
+          canvas,
+          0,
+          pageIndex * pageCanvas.height, // Start from the next section
+          canvas.width,
+          pageCanvas.height,
+          0,
+          0,
+          pageCanvas.width,
+          pageCanvas.height
+        );
+
+        // Convert cropped section to image
+        const imgData = pageCanvas.toDataURL("image/png");
+
+        // First page has no top margin
+        let positionY = pageIndex === 0 ? 0 : marginTop;
+
+        // Add the image to the PDF
+        if (pageIndex > 0) pdf.addPage();
+        pdf.addImage(
+          imgData,
+          "PNG",
+          0,
+          positionY,
+          imgWidth,
+          availablePageHeight
+        );
+
+        // Update variables for the next page
+        heightLeft -= availablePageHeight;
+        pageIndex++;
       }
       pdf.save(fileName);
     } catch (error) {
