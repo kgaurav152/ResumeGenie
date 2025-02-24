@@ -13,7 +13,7 @@ const SummaryPreview: FC<PropsType> = ({ resumeInfo, isLoading }) => {
       {isLoading ? (
         <Skeleton className="h-6 w-full" />
       ) : (
-        <p className="text-[13px] !leading-4">
+        <p className="text-[13px] !leading-4 text-justify">
           {resumeInfo?.summary ||
             "Enter a brief description of your profession baground."}
         </p>
