@@ -110,7 +110,14 @@ const SummaryForm = (props: { handleNext: () => void }) => {
       const result = await AIChatSession.sendMessage(PROMPT);
       const responseText = await result.response.text();
       const parsedResponse = JSON.parse(responseText);
-      setAiGeneratedSummary(parsedResponse);
+      const formattedSummaries = parsedResponse.summaries.reduce(
+        (acc: any, item: any) => {
+          acc[item.experienceLevel] = { summary: [item.summary] };
+          return acc;
+        },
+        {} as GeneratesSummaryType
+      );
+      setAiGeneratedSummary(formattedSummaries);
       setIsDialogOpen(false);
     } catch (error) {
       toast({
@@ -199,7 +206,7 @@ const SummaryForm = (props: { handleNext: () => void }) => {
             onChange={handleChange}
           />
 
-          {aiGeneratedSummary && (
+          {aiGeneratedSummary && Object.keys(aiGeneratedSummary).length > 0 && (
             <div>
               <h5 className="font-semibold text-[15px] my-4">Suggestions</h5>
               {Object.entries(aiGeneratedSummary).map(
@@ -208,7 +215,7 @@ const SummaryForm = (props: { handleNext: () => void }) => {
                     role="button"
                     key={index}
                     className="my-4 bg-primary/5 shadow-none border-primary/30"
-                    onClick={() => handleSelect(summary.join(" "))}
+                    onClick={() => handleSelect(summary?.join(" "))}
                   >
                     <CardHeader className="py-2">
                       <CardTitle className="font-semibold text-md">
@@ -217,7 +224,7 @@ const SummaryForm = (props: { handleNext: () => void }) => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="text-sm">
-                      {summary.map((text, idx) => (
+                      {summary?.map((text, idx) => (
                         <p key={idx}>{text}</p>
                       ))}
                     </CardContent>
